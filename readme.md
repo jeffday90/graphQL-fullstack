@@ -1,1 +1,1 @@
-GRAPHQL
+An application/tutorial in GRAPHQL.  Uses React & Apollo on the front end, GRAPHQL, node, and express for the server, and MONGODB as the database.
