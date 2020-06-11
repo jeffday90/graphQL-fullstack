@@ -2,10 +2,14 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const schema = require('./schema/schema.js');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const a = require('../hidden');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
+
+// allow cross origin request
+app.use(cors());
 
 mongoose.connect(`mongodb+srv://jeff:${a.pw}@graphql-tutorial-rmu1a.mongodb.net/graphql-tutorial?retryWrites=true&w=majority`, { 
   useNewUrlParser: true,
