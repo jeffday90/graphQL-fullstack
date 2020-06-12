@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
 // queries
-import { getAuthorsQuery, addBookMutation } from '../queries/queries';
+import { getAuthorsQuery, addBookMutation, getBooksQuery } from '../queries/queries';
 
 function AddBook (){
     const { error, loading, data } = useQuery(getAuthorsQuery);
@@ -34,7 +34,9 @@ function AddBook (){
                 name: book.name,
                 genre: book.genre,
                 authorID: book.authorID,
-            }
+            },
+            // make sure its square brackets, otherwise it won't work
+            refetchQueries: [{ query: getBooksQuery }]
         })
     }
 
