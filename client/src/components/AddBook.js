@@ -1,18 +1,12 @@
 import React from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
-const getAuthors = gql`
-   {
-      authors {
-         name
-         id
-      }
-   }
-`
+// queries
+import { getAuthorsQuery, addBookMutation } from '../queries/queries';
 
 function AddBook (){
-    const { error, loading, data } = useQuery(getAuthors);
+    const { error, loading, data } = useQuery(getAuthorsQuery);
+    const [addBookMut, { dataMutation }] = useMutation(addBookMutation);
 
     const displayAuthors = () => {
         if (loading) return <option>Loading Authors.</option>;
@@ -31,23 +25,51 @@ function AddBook (){
         }
     };
 
+    const [book, setBook] = React.useState({ name: "", genre: "", authorID: "" });
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        addBookMut({
+            variables: {
+                name: book.name,
+                genre: book.genre,
+                authorID: book.authorID,
+            }
+        })
+    }
+
     return (
-        <form id="add-book">
+        <form id="add-book" onSubmit={handleSubmit}>
           <div className="field">
-            <label htmlFor="book-name">Book Name:&nbsp;</label>
-            <input type="text" name="book-name" />
+            <label>Book Name:&nbsp;</label>
+            <input 
+                value={book.name} 
+                onChange={e => setBook({...book, name: e.target.value})} 
+                type="text" 
+                name="book-name" 
+            />
           </div>
     
     
           <div className="field">
-            <label htmlFor="genre">Genre:&nbsp;</label>
-            <input type="text" name="genre" />
+            <label>Genre:&nbsp;</label>
+            <input 
+                value={book.genre} 
+                onChange={e => setBook({...book, genre: e.target.value})} 
+                type="text" 
+                name="book-genre" 
+            />
           </div>
     
     
           <div className="field">
-            <label htmlFor="author-name">Author:&nbsp;</label>
-            <select name="author-name">{displayAuthors()}</select>
+            <label>Author:&nbsp;</label>
+            <select 
+                value={book.authorID} 
+                name="author-name"
+                onChange={e => setBook({...book, authorID: e.target.value})}>
+            {displayAuthors()}
+            </select>
           </div>
           <button>+</button>
         </form>
